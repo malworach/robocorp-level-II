@@ -6,6 +6,7 @@ from RPA.Tables import Tables
 from RPA.PDF import PDF
 from RPA.Archive import Archive
 
+import os
 @task
 def order_robots_from_RobotSpareBin():
     """
@@ -79,7 +80,11 @@ def embed_screenshot_to_receipt(screenshot_filepath, pdf_filepath, order):
         pdf_filepath,
         screenshot_filepath
     ]
-    new_pdf_filepath = "output/receipts/" + order['Order number'] +  ".pdf"
+    output_dir = "output/receipts"
+    new_pdf_filepath = os.path.join(output_dir, order['Order number'] + ".pdf")
+    # Check if the directory exists, and create it if it doesn't
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
     pdf.add_files_to_pdf(
         files=list_of_files,
         target_document = new_pdf_filepath,
